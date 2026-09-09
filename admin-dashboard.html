@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAKSH Owner Dashboard</title>
+    <!-- کتابخانه نمودار -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #0b0f19; color: white; margin: 0; display: flex; }
+        
+        /* Sidebar */
+        .sidebar { width: 250px; background-color: #111827; height: 100vh; padding: 20px; border-right: 1px solid #1f2937; }
+        .logo { font-size: 24px; font-weight: bold; color: #7c3aed; margin-bottom: 30px; }
+        .menu-item { padding: 15px; margin-bottom: 5px; border-radius: 5px; cursor: pointer; color: #9ca3af; }
+        .menu-item:hover, .menu-item.active { background-color: #7c3aed; color: white; }
+        
+        /* Main Content */
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        h1 { margin-bottom: 20px; font-size: 24px; }
+        
+        /* Grid Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: #1f2937; padding: 20px; border-radius: 10px; border: 1px solid #374151; }
+        .stat-title { color: #9ca3af; font-size: 14px; margin-bottom: 10px; }
+        .stat-value { font-size: 28px; font-weight: bold; margin-bottom: 5px; }
+        .stat-growth { color: #22c55e; font-size: 14px; }
+        
+        /* Charts */
+        .charts-row { display: flex; gap: 20px; margin-bottom: 30px; }
+        .chart-card { background: #1f2937; padding: 20px; border-radius: 10px; border: 1px solid #374151; width: 50%; }
+        .chart-title { margin-bottom: 15px; color: #9ca3af; }
+        
+        /* Tables */
+        .recent-box { background: #1f2937; padding: 20px; border-radius: 10px; border: 1px solid #374151; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #374151; font-size: 14px; }
+        th { color: #9ca3af; font-weight: normal; }
+        .status { padding: 5px 10px; border-radius: 20px; font-size: 12px; }
+        .active { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">ZAKSH</div>
+        <div class="menu-item active">Dashboard</div>
+        <div class="menu-item">Users</div>
+        <div class="menu-item">Balances</div>
+        <div class="menu-item">Mining</div>
+        <div class="menu-item">Tasks</div>
+        <div class="menu-item">Referrals</div>
+        <div class="menu-item">Wallets</div>
+        <div class="menu-item">Settings</div>
+        <div class="menu-item">Logs</div>
+    </div>
+
+    <div class="main-content">
+        <h1>Owner Dashboard</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">Total Users</div>
+                <div class="stat-value">12,482</div>
+                <div class="stat-growth">+2.5% Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Balance (ZKO)</div>
+                <div class="stat-value">2,845,670</div>
+                <div class="stat-growth">+1.8% Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Mining</div>
+                <div class="stat-value">8,421</div>
+                <div class="stat-growth">+2.2% Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Tasks</div>
+                <div class="stat-value">6,932</div>
+                <div class="stat-growth">+1.1% Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Referrals</div>
+                <div class="stat-value">4,321</div>
+                <div class="stat-growth">+3.8% Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Ads Views</div>
+                <div class="stat-value">9,876</div>
+                <div class="stat-growth">+3.1% Today</div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-card">
+                <div class="chart-title">ZKO Balance Growth (Last 7 Days)</div>
+                <canvas id="lineChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">User Growth (Last 7 Days)</div>
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+
+        <div class="recent-box">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <h3>Recent Users</h3>
+                <span style="color:#7c3aed; cursor:pointer;">View All</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Joined</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>12482</td>
+                        <td>@alik.king</td>
+                        <td>2 minutes ago</td>
+                        <td><span class="status active">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>12481</td>
+                        <td>@sarah_777</td>
+                        <td>5 minutes ago</td>
+                        <td><span class="status active">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>12480</td>
+                        <td>@mohammad_66</td>
+                        <td>10 minutes ago</td>
+                        <td><span class="status active">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>12479</td>
+                        <td>@amir_99</td>
+                        <td>15 minutes ago</td>
+                        <td><span class="status active">Active</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // نمودار خطی رشد موجودی
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['Dec 18', 'Dec 19', 'Dec 20', 'Dec 21', 'Dec 22', 'Dec 23', 'Dec 24'],
+                datasets: [{
+                    label: 'ZKO Balance',
+                    data: [1000000, 1300000, 1600000, 2000000, 2400000, 2600000, 2845670],
+                    borderColor: '#7c3aed',
+                    backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+
+        // نمودار میله‌ای رشد کاربران
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Dec 18', 'Dec 19', 'Dec 20', 'Dec 21', 'Dec 22', 'Dec 23', 'Dec 24'],
+                datasets: [{
+                    label: 'Users',
+                    data: [500, 750, 900, 1200, 1500, 1800, 2482],
+                    backgroundColor: '#7c3aed',
+                    borderRadius: 5
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+    </script>
+</body>
+</html>
