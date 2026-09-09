@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAKSH Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #0b0f19; color: #fff; margin: 0; padding: 0 20px 80px 20px; }
+        
+        /* Header */
+        .header { display: flex; align-items: center; padding: 20px 0; }
+        .avatar { width: 45px; height: 45px; border-radius: 50%; background: #333; margin-left: 10px; }
+        .info h3 { margin: 0; font-size: 16px; }
+        .info span { font-size: 12px; color: #888; }
+        .wallet-icon { margin-right: auto; font-size: 24px; cursor: pointer; }
+
+        /* Balance Box */
+        .balance-box { background: linear-gradient(135deg, #1e3a8a, #6d28d9); padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 20px; box-shadow: 0 0 20px rgba(109, 40, 217, 0.3); }
+        .balance-title { font-size: 14px; color: #ccc; }
+        .balance-amount { font-size: 32px; font-weight: bold; margin: 10px 0; }
+        .balance-usd { color: #4ade80; }
+
+        /* Countdown */
+        .countdown-box { background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 20px; border: 1px solid #333; }
+        .timer { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
+        .time-box { background: #1f2937; padding: 10px; border-radius: 8px; min-width: 60px; }
+        .time-box b { display: block; font-size: 18px; color: #7c3aed; }
+        .time-box span { font-size: 11px; color: #888; }
+
+        /* Mining Page Styles */
+        .mining-center { text-align: center; padding: 40px 0; }
+        .crystal { font-size: 80px; filter: drop-shadow(0 0 20px #7c3aed); }
+        .timer-big { font-size: 40px; font-weight: bold; margin: 10px 0; }
+        .btn-primary { background: #7c3aed; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; cursor: pointer; margin-bottom: 10px; }
+        .btn-secondary { background: transparent; color: #888; border: 1px solid #333; padding: 15px; width: 100%; border-radius: 10px; cursor: pointer; }
+
+        /* Tasks Page Styles */
+        .task-item { background: #1f2937; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .task-info h4 { margin: 0 0 5px 0; font-size: 15px; }
+        .task-info p { margin: 0; color: #888; font-size: 12px; }
+        .reward { color: #4ade80; font-weight: bold; }
+        .btn-task { background: #3b82f6; color: #fff; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; }
+
+        /* Wallet Styles */
+        .wallet-value { text-align: center; font-size: 40px; font-weight: bold; margin: 20px 0; color: #7c3aed; }
+        .locked-banner { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+
+        /* Profile Styles */
+        .profile-info { text-align: center; padding: 20px; border-bottom: 1px solid #333; margin-bottom: 20px; }
+        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: #333; margin: 0 auto 10px; font-size: 40px; display: flex; align-items: center; justify-content: center; }
+        .referral-link { background: #1f2937; padding: 10px; border-radius: 8px; color: #888; text-align: center; margin-top: 10px; font-size: 12px; direction: ltr; }
+        
+        /* Navigation Bar */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #131a2a; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #333; z-index: 100; }
+        .nav-item { color: #888; text-align: center; font-size: 11px; cursor: pointer; width: 20%; }
+        .nav-item.active { color: #7c3aed; }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 5px; }
+
+        /* Utility */
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- صفحه 1: خانه -->
+    <div id="screen-home" class="screen">
+        <div class="header">
+            <div class="avatar">👤</div>
+            <div class="info">
+                <h3 id="username">@alik.king</h3>
+                <span>Level 1</span>
+            </div>
+            <div class="wallet-icon">🪙</div>
+        </div>
+
+        <div class="balance-box">
+            <div class="balance-title">Your Balance</div>
+            <div class="balance-amount" id="user-balance">1,250 ZKO</div>
+            <div class="balance-usd">≈ $162.50</div>
+        </div>
+
+        <div class="countdown-box">
+            <h3>Campaign Ends In</h3>
+            <div class="timer">
+                <div class="time-box"><b>366</b><span>Days</span></div>
+                <div class="time-box"><b>12</b><span>Hours</span></div>
+                <div class="time-box"><b>34</b><span>Mins</span></div>
+                <div class="time-box"><b>21</b><span>Secs</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحه 2: استخراج -->
+    <div id="screen-mining" class="screen hidden">
+        <h2 style="text-align:center;">Mining</h2>
+        <div class="mining-center">
+            <div class="crystal">💎</div>
+            <div class="timer-big" id="mining-timer">00:32</div>
+            <p style="color:#888;">Mining in progress...</p>
+        </div>
+        <button class="btn-primary" id="claim-btn">Claim +12 ZKO</button>
+        <button class="btn-secondary" disabled>Next in 12m</button>
+    </div>
+
+    <!-- صفحه 3: وظایف -->
+    <div id="screen-tasks" class="screen hidden">
+        <h2>Tasks</h2>
+        
+        <div class="task-item">
+            <div class="task-info">
+                <h4>Join Channel</h4>
+                <p>@ZAKSHChannel</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="reward">+4 ZKO</div>
+                <button class="btn-task">Join</button>
+            </div>
+        </div>
+
+        <div class="task-item">
+            <div class="task-info">
+                <h4>Read Post</h4>
+                <p>Read our latest post</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="reward">+4 ZKO</div>
+                <button class="btn-task">Read</button>
+            </div>
+        </div>
+
+        <div class="task-item">
+            <div class="task-info">
+                <h4>Watch Ad</h4>
+                <p>Watch 15 seconds ad</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="reward">+10 ZKO</div>
+                <button class="btn-task">Watch</button>
+            </div>
+        </div>
+
+        <div class="task-item">
+            <div class="task-info">
+                <h4>Invite Friends</h4>
+                <p>Invite 3 friends</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="reward">+8 ZKO</div>
+                <button class="btn-task">Invite</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحه 4: کیف پول -->
+    <div id="screen-wallet" class="screen hidden">
+        <div class="header">
+            <h2>Wallet</h2>
+        </div>
+        
+        <div class="wallet-value">1,250 ZKO</div>
+        <p style="text-align:center; color:#888;">≈ $162.50</p>
+
+        <button class="btn-primary">Withdraw</button>
+
+        <div class="locked-banner">
+            <b>🔒 Withdraw is Locked</b>
+            <p style="font-size:12px; margin:5px 0 0 0;">Withdrawal will be available after the campaign ends.</p>
+        </div>
+
+        <div class="countdown-box" style="margin-top:20px;">
+            <h3>Campaign Ends In</h3>
+            <div class="timer">
+                <div class="time-box"><b>366</b><span>Days</span></div>
+                <div class="time-box"><b>12</b><span>Hours</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحه 5: پروفایل -->
+    <div id="screen-profile" class="screen hidden">
+        <div class="profile-info">
+            <div class="profile-avatar">👤</div>
+            <h3>@alik.king</h3>
+            <span style="color:#888;">Level 1</span>
+            <p style="color:#888; font-size:12px;">Member since Dec 24, 2024</p>
+        </div>
+
+        <h3>Referral Link</h3>
+        <div class="referral-link">https://t.me/ZAKSHBot?start=alik</div>
+
+        <div style="display:flex; justify-content:space-between; margin-top:20px;">
+            <div style="text-align:center;">
+                <h4 style="color:#7c3aed; margin:0;">48</h4>
+                <span style="font-size:12px; color:#888;">Total Referrals</span>
+            </div>
+            <div style="text-align:center;">
+                <h4 style="color:#7c3aed; margin:0;">256</h4>
+                <span style="font-size:12px; color:#888;">Total Earned</span>
+            </div>
+        </div>
+
+        <button class="btn-secondary" style="margin-top:20px;">Support</button>
+        <button class="btn-secondary">Settings</button>
+    </div>
+
+    <!-- منوی پایین -->
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="switchScreen('home')"><i>🏠</i>Home</div>
+        <div class="nav-item" onclick="switchScreen('mining')"><i>⛏️</i>Mining</div>
+        <div class="nav-item" onclick="switchScreen('tasks')"><i>📋</i>Tasks</div>
+        <div class="nav-item" onclick="switchScreen('wallet')"><i>👛</i>Wallet</div>
+        <div class="nav-item" onclick="switchScreen('profile')"><i>👤</i>Profile</div>
+    </div>
+
+    <script>
+        // تنظیمات اولیه تلگرام
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.setHeaderColor('#0b0f19');
+        tg.setBackgroundColor('#0b0f19');
+
+        // دریافت نام کاربری واقعی
+        const user = tg.initDataUnsafe.user;
+        if(user && user.username) {
+            document.getElementById('username').innerText = '@' + user.username;
+        }
+
+        // منطق جابه‌جایی بین صفحات
+        function switchScreen(screenName) {
+            // مخفی کردن همه صفحات
+            document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden'));
+            // نمایش صفحه انتخاب شده
+            document.getElementById('screen-' + screenName).classList.remove('hidden');
+            // تغییر وضعیت منو
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        // منطق تایمر استخراج (شبیه‌سازی)
+        let timeLeft = 32;
+        const timerInterval = setInterval(() => {
+            if(timeLeft > 0) {
+                timeLeft--;
+                document.getElementById('mining-timer').innerText = '00:' + (timeLeft < 10 ? '0' : '') + timeLeft;
+            }
+        }, 1000);
+
+        // دکمه Claim
+        document.getElementById('claim-btn').addEventListener('click', function() {
+            alert('شما 12 ZKO دریافت کردید! (برای اتصال واقعی، باید به سرور متصل شود)');
+            // در پروژه واقعی: درخواست POST به سرور برای افزایش موجودی
+        });
+    </script>
+</body>
+</html>
